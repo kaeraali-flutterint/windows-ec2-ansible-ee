@@ -74,6 +74,7 @@ ARG ANSIBLE_GALAXY_CLI_ROLE_OPTS
 ARG ANSIBLE_INSTALL_REFS
 ARG PKGMGR
 
+RUN sudo yum install -y https://s3.amazonaws.com/session-manager-downloads/plugin/latest/linux_64bit/session-manager-plugin.rpm
 RUN /output/scripts/check_ansible $PYCMD
 
 COPY --from=galaxy /usr/share/ansible /usr/share/ansible
