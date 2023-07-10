@@ -1,3 +1,0 @@
-pypsrp
-requests[socks]
-PySocks
