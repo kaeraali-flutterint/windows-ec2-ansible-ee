@@ -6,5 +6,6 @@ Adds:
 
 - AWS collections from Galaxy
 - Windows collections from Galaxy
+- community.general collection from Galaxy
 - Python libraries for connecting to WinRM over a SOCKS proxy
 - Session Manager plugin for connecting to hosts over AWS SSM

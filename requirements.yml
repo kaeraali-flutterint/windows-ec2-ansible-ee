@@ -4,3 +4,4 @@ collections:
 - community.windows
 - amazon.aws
 - community.aws
+- community.general
