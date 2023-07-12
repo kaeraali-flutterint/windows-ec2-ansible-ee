@@ -5,10 +5,16 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        description: 'Version to tag the image with'
+        default: latest
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  ORIGINAL_IMAGE_NAME: ${{ github.repository }}
 
 jobs:
 
@@ -21,6 +27,12 @@ jobs:
       id-token: write
 
     steps:
+    - name: Set the variables
+      env:
+        DEFAULT_VERSION: 'latest'
+      run: |
+        echo "VERSION=${{ github.event.inputs.version || env.DEFAULT_VERSION }}" >> $GITHUB_ENV
+        echo "IMAGE_NAME=${ORIGINAL_IMAGE_NAME,,}" >> $GITHUB_ENV
     - uses: actions/checkout@v3
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -40,8 +52,8 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Build the Docker image
-      run: ansible-builder build --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} --container-runtime docker
+      run: ansible-builder build --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$VERSION --container-runtime docker
     - name: Push the Docker image
-      run: docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      run: docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:$VERSION
       if: github.event_name != 'pull_request'
 
